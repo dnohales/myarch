@@ -1,0 +1,16 @@
+diff --git a/gtk/gtksearchentry.c b/gtk/gtksearchentry.c
+index 745dffd..780eb5b 100644
+--- a/gtk/gtksearchentry.c
++++ b/gtk/gtksearchentry.c
+@@ -150,7 +150,10 @@ gtk_search_entry_icon_release (GtkEntry             *entry,
+                                GtkEntryIconPosition  icon_pos)
+ {
+   if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
+-    gtk_entry_set_text (entry, "");
++    {
++      gtk_entry_set_text (entry, "");
++      gtk_widget_grab_focus (entry);
++    }
+ }
+ 
+ static gboolean
