@@ -1,0 +1,33 @@
+# Maintainer: Damián Nohales <damiannohales@gmail.com>
+
+pkgname=php-systemd
+_extname=systemd
+pkgver=0.1.2
+_pkgverfull=release-$pkgver
+pkgrel=1
+pkgdesc="PHP extension allowing native interaction with systemd and its journal"
+arch=("i686" "x86_64")
+url="https://github.com/systemd/php-systemd"
+license=('MIT')
+depends=('php')
+source=("https://github.com/systemd/$pkgname/archive/$_pkgverfull.tar.gz")
+backup=("etc/php/conf.d/$_extname.ini")
+sha256sums=()
+
+build() {
+    cd "$srcdir/$pkgname-$_pkgverfull"
+
+    phpize
+    ./configure --with-systemd
+    make
+}
+
+package() {
+    cd "$srcdir/$pkgname-$_pkgverfull"
+
+    install -m0755 -d "$pkgdir/etc/php/conf.d/"
+    install -m0644 -D "LICENSE.txt" "${pkgdir}/usr/share/licenses/$pkgname/LICENSE"
+    echo ";extension=$_extname.so" > "$pkgdir/etc/php/conf.d/$_extname.ini"
+    chmod 0644 "$pkgdir/etc/php/conf.d/$_extname.ini"
+    install -m0755 -D "modules/$_extname.so" "$pkgdir$(php-config --extension-dir)/$_extname.so"
+}
